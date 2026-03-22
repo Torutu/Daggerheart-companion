@@ -68,27 +68,27 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   // ── Vertical (rowSpan) resize ──────────────────────────────────────────────
   String? _vertResizingId;
   int? _vertResizePointer;
-  double _vertResizeAccum = 0;      // raw pixel accumulator
+  double _vertResizeAccum = 0; // raw pixel accumulator
   double _vertResizeOrigSpan = 0.0; // rowSpan fraction at gesture start
   double _vertResizeLastSnap = 0.0; // last snapped fraction (for haptics)
 
   // ── Measured each build ────────────────────────────────────────────────────
-  double _colWidth      = 0;
-  double _viewportH     = 0; // used for percentage calculation
+  double _colWidth = 0;
+  double _viewportH = 0; // used for percentage calculation
 
   // ── Phantom animation ──────────────────────────────────────────────────────
   late final AnimationController _fadeCtrl;
   late final Animation<double> _fadeAnim;
 
   // ── Constants ──────────────────────────────────────────────────────────────
-  static const _holdDuration    = Duration(milliseconds: 350);
+  static const _holdDuration = Duration(milliseconds: 350);
   static const _cancelThreshold = 8.0;
-  static const _resizeZone      = 22.0;
-  static const _presetSpans     = [10, 7, 5, 3];
+  static const _resizeZone = 22.0;
+  static const _presetSpans = [10, 7, 5, 3];
   // Tap the bottom pill to cycle through these rowSpan presets
-  static const _vPresets        = [0.0, 0.25, 0.50, 0.75];
+  static const _vPresets = [0.0, 0.25, 0.50, 0.75];
   // Drag snaps every 5 % of viewport height
-  static const _vStep           = 0.05;
+  static const _vStep = 0.05;
 
   @override
   void initState() {
@@ -96,9 +96,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     _blocks = [...widget.blocks];
     _syncKeys();
     _fadeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 220));
-    _fadeAnim =
-        CurvedAnimation(parent: _fadeCtrl, curve: Curves.easeOutCubic);
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+    _fadeAnim = CurvedAnimation(parent: _fadeCtrl, curve: Curves.easeOutCubic);
   }
 
   @override
@@ -167,8 +168,14 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   }
 
   void _onPointerMove(PointerMoveEvent e) {
-    if (e.pointer == _resizePointer)     { _updateHResize(e.delta.dx); return; }
-    if (e.pointer == _vertResizePointer) { _updateVResize(e.delta.dy); return; }
+    if (e.pointer == _resizePointer) {
+      _updateHResize(e.delta.dx);
+      return;
+    }
+    if (e.pointer == _vertResizePointer) {
+      _updateVResize(e.delta.dy);
+      return;
+    }
     if (_dragging != null && e.pointer == _activePointer) {
       _dragGlobal = e.position;
       _overlay?.markNeedsBuild();
@@ -185,8 +192,14 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   }
 
   void _onPointerUp(PointerUpEvent e) {
-    if (e.pointer == _resizePointer)     { _endHResize(); return; }
-    if (e.pointer == _vertResizePointer) { _endVResize(); return; }
+    if (e.pointer == _resizePointer) {
+      _endHResize();
+      return;
+    }
+    if (e.pointer == _vertResizePointer) {
+      _endVResize();
+      return;
+    }
     _holdTimer?.cancel();
     _pending = null;
     if (_dragging != null && e.pointer == _activePointer) _dropBlock();
@@ -197,10 +210,16 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     _holdTimer?.cancel();
     _pending = null;
     if (e.pointer == _resizePointer) {
-      setState(() { _resizingId = null; _resizePointer = null; });
+      setState(() {
+        _resizingId = null;
+        _resizePointer = null;
+      });
     }
     if (e.pointer == _vertResizePointer) {
-      setState(() { _vertResizingId = null; _vertResizePointer = null; });
+      setState(() {
+        _vertResizingId = null;
+        _vertResizePointer = null;
+      });
     }
     if (_dragging != null && e.pointer == _activePointer) {
       _removeOverlay();
@@ -228,7 +247,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     _removeOverlay();
     final rest = _blocks.where((b) => b.id != _dragging!.id).toList();
     rest.insert(_phantomIndex.clamp(0, rest.length), _dragging!);
-    setState(() { _blocks = rest; _dragging = null; });
+    setState(() {
+      _blocks = rest;
+      _dragging = null;
+    });
     widget.onLayoutChanged(_blocks);
     HapticFeedback.lightImpact();
   }
@@ -249,7 +271,11 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
       final rect = box.localToGlobal(Offset.zero) & box.size;
       if (!rect.contains(globalPos)) continue;
       final relX = (globalPos.dx - rect.left) / rect.width;
-      final candidate = relX < 0.40 ? i : relX > 0.60 ? i + 1 : _phantomIndex;
+      final candidate = relX < 0.40
+          ? i
+          : relX > 0.60
+          ? i + 1
+          : _phantomIndex;
       final c = candidate.clamp(0, rest.length);
       if (c != _phantomIndex) setState(() => _phantomIndex = c);
       return;
@@ -274,7 +300,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     Overlay.of(context).insert(_overlay!);
   }
 
-  void _removeOverlay() { _overlay?.remove(); _overlay = null; }
+  void _removeOverlay() {
+    _overlay?.remove();
+    _overlay = null;
+  }
 
   // ── Horizontal resize ──────────────────────────────────────────────────────
 
@@ -282,8 +311,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     final block = _blocks.firstWhere((b) => b.id == id);
     HapticFeedback.selectionClick();
     setState(() {
-      _resizingId = id;  _resizePointer = pointer;
-      _resizeAccum = 0;  _resizeOrigSpan = block.colSpan;
+      _resizingId = id;
+      _resizePointer = pointer;
+      _resizeAccum = 0;
+      _resizeOrigSpan = block.colSpan;
       _resizeLastSnap = block.colSpan;
     });
   }
@@ -291,8 +322,8 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   void _updateHResize(double dx) {
     if (_resizingId == null || _colWidth <= 0) return;
     _resizeAccum += dx;
-    final newSpan =
-        (_resizeOrigSpan + (_resizeAccum / _colWidth).round()).clamp(1, 10);
+    final newSpan = (_resizeOrigSpan + (_resizeAccum / _colWidth).round())
+        .clamp(1, 10);
     if (newSpan != _resizeLastSnap) {
       HapticFeedback.selectionClick();
       _resizeLastSnap = newSpan;
@@ -300,8 +331,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     final cur = _blocks.firstWhere((b) => b.id == _resizingId);
     if (cur.colSpan == newSpan) return;
     setState(() {
-      _blocks = [for (final b in _blocks)
-        if (b.id == _resizingId) b.copyWith(colSpan: newSpan) else b];
+      _blocks = [
+        for (final b in _blocks)
+          if (b.id == _resizingId) b.copyWith(colSpan: newSpan) else b,
+      ];
     });
   }
 
@@ -311,15 +344,23 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     if (_resizeAccum.abs() < 6) {
       final cur = _blocks.firstWhere((b) => b.id == id).colSpan;
       final next = _presetSpans.firstWhere(
-          (s) => s < cur, orElse: () => _presetSpans.first);
+        (s) => s < cur,
+        orElse: () => _presetSpans.first,
+      );
       setState(() {
-        _blocks = [for (final b in _blocks)
-          if (b.id == id) b.copyWith(colSpan: next) else b];
-        _resizingId = null; _resizePointer = null;
+        _blocks = [
+          for (final b in _blocks)
+            if (b.id == id) b.copyWith(colSpan: next) else b,
+        ];
+        _resizingId = null;
+        _resizePointer = null;
       });
       HapticFeedback.lightImpact();
     } else {
-      setState(() { _resizingId = null; _resizePointer = null; });
+      setState(() {
+        _resizingId = null;
+        _resizePointer = null;
+      });
     }
     widget.onLayoutChanged(_blocks);
   }
@@ -347,9 +388,9 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
 
     HapticFeedback.selectionClick();
     setState(() {
-      _vertResizingId     = id;
-      _vertResizePointer  = pointer;
-      _vertResizeAccum    = 0;
+      _vertResizingId = id;
+      _vertResizePointer = pointer;
+      _vertResizeAccum = 0;
       _vertResizeOrigSpan = startSpan;
       _vertResizeLastSnap = startSpan;
     });
@@ -375,8 +416,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     // Avoid rebuilds for sub-step differences
     if ((cur.rowSpan - newSpan).abs() < _vStep / 4) return;
     setState(() {
-      _blocks = [for (final b in _blocks)
-        if (b.id == _vertResizingId) b.copyWith(rowSpan: newSpan) else b];
+      _blocks = [
+        for (final b in _blocks)
+          if (b.id == _vertResizingId) b.copyWith(rowSpan: newSpan) else b,
+      ];
     });
   }
 
@@ -387,15 +430,23 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
       // Tap → cycle presets: 0 % → 25 % → 50 % → 75 % → 0 %
       final cur = _blocks.firstWhere((b) => b.id == id).rowSpan;
       final next = _vPresets.firstWhere(
-          (p) => p > cur + 0.01, orElse: () => _vPresets.first);
+        (p) => p > cur + 0.01,
+        orElse: () => _vPresets.first,
+      );
       setState(() {
-        _blocks = [for (final b in _blocks)
-          if (b.id == id) b.copyWith(rowSpan: next) else b];
-        _vertResizingId = null; _vertResizePointer = null;
+        _blocks = [
+          for (final b in _blocks)
+            if (b.id == id) b.copyWith(rowSpan: next) else b,
+        ];
+        _vertResizingId = null;
+        _vertResizePointer = null;
       });
       HapticFeedback.lightImpact();
     } else {
-      setState(() { _vertResizingId = null; _vertResizePointer = null; });
+      setState(() {
+        _vertResizingId = null;
+        _vertResizePointer = null;
+      });
     }
     widget.onLayoutChanged(_blocks);
   }
@@ -406,35 +457,44 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   Widget build(BuildContext context) {
     _viewportH = MediaQuery.of(context).size.height;
 
-    return LayoutBuilder(builder: (_, constraints) {
-      _colWidth = constraints.maxWidth / 10;
-      final items = _displayItems;
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        _colWidth = constraints.maxWidth / 10;
+        final items = _displayItems;
 
-      final rows = <List<_Item>>[];
-      var row = <_Item>[];
-      var spanAcc = 0;
-      for (final item in items) {
-        final s = item.colSpan.clamp(1, 10);
-        if (spanAcc + s > 10 && row.isNotEmpty) {
-          rows.add(row); row = []; spanAcc = 0;
+        final rows = <List<_Item>>[];
+        var row = <_Item>[];
+        var spanAcc = 0;
+        for (final item in items) {
+          final s = item.colSpan.clamp(1, 10);
+          if (spanAcc + s > 10 && row.isNotEmpty) {
+            rows.add(row);
+            row = [];
+            spanAcc = 0;
+          }
+          row.add(item);
+          spanAcc += s;
         }
-        row.add(item); spanAcc += s;
-      }
-      if (row.isNotEmpty) rows.add(row);
+        if (row.isNotEmpty) rows.add(row);
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: rows.map((rowItems) => Row(
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: rowItems.map((item) {
-            final w = item.colSpan.clamp(1, 10) * _colWidth;
-            return item.isPhantom
-                ? _buildPhantom(w, item.block)
-                : _buildBlockSlot(item.block, w);
-          }).toList(),
-        )).toList(),
-      );
-    });
+          children: rows
+              .map(
+                (rowItems) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: rowItems.map((item) {
+                    final w = item.colSpan.clamp(1, 10) * _colWidth;
+                    return item.isPhantom
+                        ? _buildPhantom(w, item.block)
+                        : _buildBlockSlot(item.block, w);
+                  }).toList(),
+                ),
+              )
+              .toList(),
+        );
+      },
+    );
   }
 
   // ── Phantom slot ───────────────────────────────────────────────────────────
@@ -443,7 +503,7 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
     final fixedH = block.rowSpan > 0 ? block.rowSpan * _viewportH : null;
     return AnimatedBuilder(
       animation: _fadeAnim,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = _fadeAnim.value;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 160),
@@ -459,7 +519,8 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                   padding: const EdgeInsets.all(4),
                   child: fixedH != null
                       ? SizedBox.expand(
-                          child: widget.blockBuilder(block.id, block.rowSpan))
+                          child: widget.blockBuilder(block.id, block.rowSpan),
+                        )
                       : widget.blockBuilder(block.id, block.rowSpan),
                 ),
                 Positioned.fill(
@@ -468,32 +529,40 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: AppColors.primary
-                            .withAlpha((220 * t).round().clamp(0, 255)),
+                        color: AppColors.primary.withAlpha(
+                          (220 * t).round().clamp(0, 255),
+                        ),
                         width: 2,
                       ),
-                      color: AppColors.primary
-                          .withAlpha((22 * t).round().clamp(0, 255)),
+                      color: AppColors.primary.withAlpha(
+                        (22 * t).round().clamp(0, 255),
+                      ),
                     ),
                     child: Center(
                       child: Opacity(
                         opacity: t,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.primary,
                             borderRadius: BorderRadius.circular(4),
-                            boxShadow: [BoxShadow(
-                              color: AppColors.primary.withAlpha(140),
-                              blurRadius: 14,
-                            )],
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withAlpha(140),
+                                blurRadius: 14,
+                              ),
+                            ],
                           ),
                           child: Text(
                             'DROP HERE',
                             style: GoogleFonts.cinzel(
-                              fontSize: 8, fontWeight: FontWeight.w700,
-                              color: AppColors.background, letterSpacing: 1.4,
+                              fontSize: 8,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.background,
+                              letterSpacing: 1.4,
                             ),
                           ),
                         ),
@@ -514,7 +583,7 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   Widget _buildBlockSlot(SheetBlock block, double width) {
     final isHResizing = _resizingId == block.id;
     final isVResizing = _vertResizingId == block.id;
-    final isPending   = _pending?.id == block.id;
+    final isPending = _pending?.id == block.id;
 
     // Fixed height when rowSpan > 0; null = auto (intrinsic content height).
     final fixedH = block.rowSpan > 0 ? block.rowSpan * _viewportH : null;
@@ -529,7 +598,7 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
       width: width,
       // AnimatedContainer smoothly animates width changes.
       // Height is handled by AnimatedSize below for auto↔fixed transitions.
-    child: AnimatedSize(
+      child: AnimatedSize(
         duration: const Duration(milliseconds: 220),
         curve: Curves.easeOutCubic,
         child: SizedBox(
@@ -557,38 +626,48 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                     // without it the block uses its natural intrinsic height.
                     child: hasFixedH
                         ? SizedBox.expand(
-                            child: widget.blockBuilder(block.id, block.rowSpan))
+                            child: widget.blockBuilder(block.id, block.rowSpan),
+                          )
                         : widget.blockBuilder(block.id, block.rowSpan),
                   ),
                 ),
 
                 // ── Hold-to-move hint ──────────────────────────────────────
                 Positioned(
-                  top: 8, left: 8,
+                  top: 8,
+                  left: 8,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 180),
                     opacity: _dragging == null ? 0.40 : 0.0,
                     child: Container(
-                      width: 22, height: 22,
+                      width: 22,
+                      height: 22,
                       decoration: BoxDecoration(
                         color: AppColors.surface.withAlpha(220),
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(color: AppColors.border),
                       ),
-                      child: const Icon(Icons.open_with,
-                          size: 12, color: AppColors.textDisabled),
+                      child: const Icon(
+                        Icons.open_with,
+                        size: 12,
+                        color: AppColors.textDisabled,
+                      ),
                     ),
                   ),
                 ),
 
                 // ── Right-edge pill — colSpan resize ──────────────────────
                 Positioned(
-                  top: 0, right: 0, bottom: _resizeZone, width: _resizeZone,
+                  top: 0,
+                  right: 0,
+                  bottom: _resizeZone,
+                  width: _resizeZone,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 140),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.horizontal(
-                          right: Radius.circular(6)),
+                        right: Radius.circular(6),
+                      ),
                       color: isHResizing
                           ? AppColors.primary.withAlpha(40)
                           : Colors.transparent,
@@ -604,9 +683,12 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                               : AppColors.textDisabled.withAlpha(80),
                           borderRadius: BorderRadius.circular(3),
                           boxShadow: isHResizing
-                              ? [BoxShadow(
-                                  color: AppColors.primary.withAlpha(160),
-                                  blurRadius: 10)]
+                              ? [
+                                  BoxShadow(
+                                    color: AppColors.primary.withAlpha(160),
+                                    blurRadius: 10,
+                                  ),
+                                ]
                               : null,
                         ),
                       ),
@@ -617,12 +699,16 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                 // ── Bottom-edge pill — rowSpan resize ─────────────────────
                 // Shows current percentage when active
                 Positioned(
-                  bottom: 0, left: 0, right: _resizeZone, height: _resizeZone,
+                  bottom: 0,
+                  left: 0,
+                  right: _resizeZone,
+                  height: _resizeZone,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 140),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(6)),
+                        bottom: Radius.circular(6),
+                      ),
                       color: isVResizing
                           ? AppColors.hope.withAlpha(40)
                           : Colors.transparent,
@@ -648,9 +734,12 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
                                     : AppColors.textDisabled.withAlpha(80),
                                 borderRadius: BorderRadius.circular(3),
                                 boxShadow: isVResizing
-                                    ? [BoxShadow(
-                                        color: AppColors.hope.withAlpha(160),
-                                        blurRadius: 10)]
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.hope.withAlpha(160),
+                                          blurRadius: 10,
+                                        ),
+                                      ]
                                     : null,
                               ),
                             ),
@@ -666,7 +755,10 @@ class _InteractiveSheetGridState extends State<InteractiveSheetGrid>
   }
 
   @override
-  void deactivate() { _removeOverlay(); super.deactivate(); }
+  void deactivate() {
+    _removeOverlay();
+    super.deactivate();
+  }
 }
 
 // ── Floating block overlay ────────────────────────────────────────────────────
@@ -693,12 +785,15 @@ class _FloatingBlock extends StatelessWidget {
     final blockH = block.rowSpan > 0 ? block.rowSpan * viewportH : null;
 
     final left = (globalPos.dx - blockW / 2).clamp(8.0, sw - blockW - 8);
-    final top  = blockH != null
+    final top = blockH != null
         ? globalPos.dy - blockH / 2
         : globalPos.dy - 55.0;
 
     return Positioned(
-      left: left, top: top, width: blockW, height: blockH,
+      left: left,
+      top: top,
+      width: blockW,
+      height: blockH,
       child: IgnorePointer(
         child: Material(
           color: Colors.transparent,
@@ -708,10 +803,16 @@ class _FloatingBlock extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.primary, width: 2),
               boxShadow: [
-                BoxShadow(color: AppColors.primary.withAlpha(100),
-                    blurRadius: 32, spreadRadius: 2),
-                BoxShadow(color: Colors.black.withAlpha(180),
-                    blurRadius: 20, offset: const Offset(0, 12)),
+                BoxShadow(
+                  color: AppColors.primary.withAlpha(100),
+                  blurRadius: 32,
+                  spreadRadius: 2,
+                ),
+                BoxShadow(
+                  color: Colors.black.withAlpha(180),
+                  blurRadius: 20,
+                  offset: const Offset(0, 12),
+                ),
               ],
             ),
             child: ClipRRect(
@@ -730,7 +831,7 @@ class _FloatingBlock extends StatelessWidget {
 class _Item {
   final SheetBlock block;
   final bool isPhantom;
-  const _Item.real(this.block)    : isPhantom = false;
+  const _Item.real(this.block) : isPhantom = false;
   const _Item.phantom(this.block) : isPhantom = true;
   int get colSpan => block.colSpan;
 }

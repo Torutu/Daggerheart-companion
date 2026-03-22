@@ -8,11 +8,7 @@ class StepClass extends StatefulWidget {
   final String? selected;
   final void Function(String) onChanged;
 
-  const StepClass({
-    super.key,
-    required this.selected,
-    required this.onChanged,
-  });
+  const StepClass({super.key, required this.selected, required this.onChanged});
 
   @override
   State<StepClass> createState() => _StepClassState();
@@ -55,11 +51,8 @@ class _StepClassState extends State<StepClass>
           Positioned.fill(
             child: AnimatedBuilder(
               animation: _smokeCtrl,
-              builder: (_, __) => CustomPaint(
-                painter: _SmokePainter(
-                  colors: colors,
-                  t: _smokeCtrl.value,
-                ),
+              builder: (_, _) => CustomPaint(
+                painter: _SmokePainter(colors: colors, t: _smokeCtrl.value),
               ),
             ),
           ),
@@ -97,9 +90,10 @@ class _StepClassState extends State<StepClass>
 
   Widget _buildClassCard(ClassDefinition classDef) {
     final isSelected = classDef.id == widget.selected;
-    final domainColors =
-        classDef.domains.map(AppColors.domainColor).toList();
-    final accentColor = domainColors.isNotEmpty ? domainColors.first : AppColors.primary;
+    final domainColors = classDef.domains.map(AppColors.domainColor).toList();
+    final accentColor = domainColors.isNotEmpty
+        ? domainColors.first
+        : AppColors.primary;
 
     return GestureDetector(
       onTap: () => widget.onChanged(classDef.id),
@@ -121,7 +115,7 @@ class _StepClassState extends State<StepClass>
                     color: accentColor.withAlpha(60),
                     blurRadius: 12,
                     spreadRadius: 0,
-                  )
+                  ),
                 ]
               : null,
         ),
@@ -136,7 +130,8 @@ class _StepClassState extends State<StepClass>
                     ? accentColor.withAlpha(30)
                     : AppColors.surfaceVariant,
                 borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(9)),
+                  top: Radius.circular(9),
+                ),
               ),
               child: Row(
                 children: [
@@ -156,7 +151,9 @@ class _StepClassState extends State<StepClass>
                     return Container(
                       margin: const EdgeInsets.only(left: 5),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 2),
+                        horizontal: 7,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: c.withAlpha(40),
                         borderRadius: BorderRadius.circular(4),
@@ -201,8 +198,7 @@ class _StepClassState extends State<StepClass>
                       _stat('Evasion', '${classDef.startingEvasion}'),
                       _stat('Armor', '${classDef.startingArmorSlots}'),
                       if (classDef.spellcastTrait != null)
-                        _stat('Cast',
-                            _cap(classDef.spellcastTrait!)),
+                        _stat('Cast', _cap(classDef.spellcastTrait!)),
                     ],
                   ),
                   // Class feature — shown only when selected
@@ -263,7 +259,9 @@ class _StepClassState extends State<StepClass>
             TextSpan(
               text: '$label ',
               style: GoogleFonts.cinzel(
-                  fontSize: 9, color: AppColors.textDisabled),
+                fontSize: 9,
+                color: AppColors.textDisabled,
+              ),
             ),
             TextSpan(
               text: value,
@@ -279,8 +277,7 @@ class _StepClassState extends State<StepClass>
     );
   }
 
-  String _cap(String s) =>
-      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+  String _cap(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 }
 
 // ── Smoke painter ─────────────────────────────────────────────────────────────
@@ -300,26 +297,30 @@ class _SmokePainter extends CustomPainter {
     for (int ci = 0; ci < colors.length; ci++) {
       final color = colors[ci];
       // Two blobs per domain, offset in phase
-      blobs.add(_Blob(
-        color: color.withAlpha(55),
-        cx: 0.25 + ci * 0.35,
-        cy: 0.3 + ci * 0.15,
-        rx: 0.28,
-        ry: 0.18,
-        phase: ci * math.pi * 0.7,
-        speed: 1.0 + ci * 0.3,
-        radius: size.shortestSide * 0.38,
-      ));
-      blobs.add(_Blob(
-        color: color.withAlpha(35),
-        cx: 0.6 - ci * 0.15,
-        cy: 0.65 + ci * 0.1,
-        rx: 0.22,
-        ry: 0.25,
-        phase: ci * math.pi * 1.3 + math.pi,
-        speed: 0.7 + ci * 0.4,
-        radius: size.shortestSide * 0.30,
-      ));
+      blobs.add(
+        _Blob(
+          color: color.withAlpha(55),
+          cx: 0.25 + ci * 0.35,
+          cy: 0.3 + ci * 0.15,
+          rx: 0.28,
+          ry: 0.18,
+          phase: ci * math.pi * 0.7,
+          speed: 1.0 + ci * 0.3,
+          radius: size.shortestSide * 0.38,
+        ),
+      );
+      blobs.add(
+        _Blob(
+          color: color.withAlpha(35),
+          cx: 0.6 - ci * 0.15,
+          cy: 0.65 + ci * 0.1,
+          rx: 0.22,
+          ry: 0.25,
+          phase: ci * math.pi * 1.3 + math.pi,
+          speed: 0.7 + ci * 0.4,
+          radius: size.shortestSide * 0.30,
+        ),
+      );
     }
 
     for (final blob in blobs) {
@@ -332,15 +333,13 @@ class _SmokePainter extends CustomPainter {
         blob.radius,
         Paint()
           ..color = blob.color
-          ..maskFilter =
-              MaskFilter.blur(BlurStyle.normal, blob.radius * 0.55),
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, blob.radius * 0.55),
       );
     }
   }
 
   @override
-  bool shouldRepaint(_SmokePainter old) =>
-      old.t != t || old.colors != colors;
+  bool shouldRepaint(_SmokePainter old) => old.t != t || old.colors != colors;
 }
 
 class _Blob {

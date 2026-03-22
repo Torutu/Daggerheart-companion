@@ -14,9 +14,7 @@ class CharacterListScreen extends ConsumerWidget {
     final asyncCharacters = ref.watch(characterListProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Daggerheart Companion'),
-      ),
+      appBar: AppBar(title: const Text('Daggerheart Companion')),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/character/new'),
@@ -33,7 +31,10 @@ class CharacterListScreen extends ConsumerWidget {
         error: (err, _) => Center(
           child: Text(
             'Error loading characters:\n$err',
-            style: GoogleFonts.crimsonText(color: AppColors.textSecondary, fontSize: 16),
+            style: GoogleFonts.crimsonText(
+              color: AppColors.textSecondary,
+              fontSize: 16,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -50,7 +51,7 @@ class CharacterListScreen extends ConsumerWidget {
               child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
                 itemCount: characters.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final character = characters[index];
                   return SizedBox(
@@ -59,7 +60,11 @@ class CharacterListScreen extends ConsumerWidget {
                       character: character,
                       onTap: () => context.push('/character/${character.id}'),
                       onDelete: () => _showDeleteDialog(
-                          context, ref, character.id, character.name),
+                        context,
+                        ref,
+                        character.id,
+                        character.name,
+                      ),
                     ),
                   );
                 },
@@ -116,7 +121,10 @@ class CharacterListScreen extends ConsumerWidget {
             icon: const Icon(Icons.auto_fix_high),
             label: Text(
               'Forge a Legend',
-              style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 15),
+              style: GoogleFonts.cinzel(
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+              ),
             ),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),

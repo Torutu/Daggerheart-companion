@@ -18,19 +18,14 @@ class DamageThresholdsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      // Each box takes equal width; arrows sit between them
       children: [
-        Row(
-          children: [
-            _ThresholdBox(label: 'MINOR', value: minor, color: AppColors.thresholdMinor),
-            _Arrow(),
-            _ThresholdBox(label: 'MAJOR', value: major, color: AppColors.thresholdMajor),
-            _Arrow(),
-            _ThresholdBox(label: 'SEVERE', value: severe, color: AppColors.thresholdSevere),
-          ],
-        ),
+        Expanded(child: _ThresholdBox(label: 'MINOR',  value: minor,  color: AppColors.thresholdMinor)),
+        _Arrow(),
+        Expanded(child: _ThresholdBox(label: 'MAJOR',  value: major,  color: AppColors.thresholdMajor)),
+        _Arrow(),
+        Expanded(child: _ThresholdBox(label: 'SEVERE', value: severe, color: AppColors.thresholdSevere)),
       ],
     );
   }
@@ -50,7 +45,6 @@ class _ThresholdBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 62,
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
@@ -59,6 +53,7 @@ class _ThresholdBox extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             label,

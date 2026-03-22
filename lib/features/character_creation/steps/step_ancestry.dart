@@ -17,7 +17,7 @@ class StepAncestry extends StatelessWidget {
   final bool isMixed;
   final String? selected2;
   final void Function(String ancestryId, bool isMixed, String? ancestryId2)
-      onChanged;
+  onChanged;
 
   const StepAncestry({
     super.key,
@@ -94,7 +94,7 @@ class StepAncestry extends StatelessWidget {
                     // When turning off mixed, keep primary, clear secondary
                     onChanged(selected ?? '', v, v ? selected2 : null);
                   },
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -157,8 +157,9 @@ class StepAncestry extends StatelessWidget {
             final isAnySelected = isPrimary || isSecondary;
 
             // Highlight color: gold for primary / purple for secondary
-            final highlightColor =
-                isPrimary ? AppColors.primary : AppColors.secondary;
+            final highlightColor = isPrimary
+                ? AppColors.primary
+                : AppColors.secondary;
 
             return GestureDetector(
               onTap: () => _handleTap(ancestry.id),
@@ -181,7 +182,9 @@ class StepAncestry extends StatelessWidget {
                     // Name header
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: isAnySelected
                             ? highlightColor.withAlpha(30)
@@ -226,7 +229,9 @@ class StepAncestry extends StatelessWidget {
                       label: isMixed ? '②' : '◆',
                       text: ancestry.featureBottom,
                       highlight: isMixed ? isSecondary : isAnySelected,
-                      highlightColor: isMixed ? AppColors.secondary : AppColors.primary,
+                      highlightColor: isMixed
+                          ? AppColors.secondary
+                          : AppColors.primary,
                     ),
                   ],
                 ),
@@ -265,7 +270,9 @@ class StepAncestry extends StatelessWidget {
               text,
               style: GoogleFonts.crimsonText(
                 fontSize: 12,
-                color: highlight ? AppColors.textPrimary : AppColors.textSecondary,
+                color: highlight
+                    ? AppColors.textPrimary
+                    : AppColors.textSecondary,
                 height: 1.35,
               ),
             ),
@@ -307,7 +314,9 @@ class StepAncestry extends StatelessWidget {
               value ?? 'Not selected',
               style: GoogleFonts.crimsonText(
                 fontSize: 13,
-                color: value != null ? AppColors.textPrimary : AppColors.textDisabled,
+                color: value != null
+                    ? AppColors.textPrimary
+                    : AppColors.textDisabled,
                 fontStyle: value == null ? FontStyle.italic : FontStyle.normal,
               ),
             ),

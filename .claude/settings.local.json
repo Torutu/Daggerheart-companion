@@ -32,7 +32,10 @@
       "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" --version)",
       "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" analyze)",
       "Bash(npm --version)",
-      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" analyze --no-fatal-infos)"
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" analyze --no-fatal-infos)",
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" build web)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :8080)"
     ]
   }
 }

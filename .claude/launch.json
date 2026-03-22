@@ -4,8 +4,8 @@
     {
       "name": "Flutter Web (preview)",
       "runtimeExecutable": "cmd",
-      "runtimeArgs": ["/c", "D:\\Flutter SDK\\flutter\\bin\\flutter.bat", "run", "-d", "web-server", "--web-port", "8080", "--web-hostname", "localhost"],
-      "port": 8080
+      "runtimeArgs": ["/c", "D:\\Flutter SDK\\flutter\\bin\\flutter.bat", "run", "-d", "web-server", "--web-port", "8081", "--web-hostname", "localhost"],
+      "port": 8081
     },
     {
       "name": "Flutter Edge",

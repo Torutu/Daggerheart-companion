@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Flutter Web (preview)",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "D:\\Flutter SDK\\flutter\\bin\\flutter.bat", "run", "-d", "web-server", "--web-port", "8080", "--web-hostname", "localhost"],
+      "port": 8080
+    },
+    {
+      "name": "Flutter Edge",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "D:\\Flutter SDK\\flutter\\bin\\flutter.bat", "run", "-d", "edge"],
+      "port": 0
+    },
+    {
+      "name": "Flutter Windows",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "D:\\Flutter SDK\\flutter\\bin\\flutter.bat", "run", "-d", "windows"],
+      "port": 0
+    }
+  ]
+}

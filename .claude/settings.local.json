@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import PyPDF2; print\\(''ok''\\)\")",
+      "Bash(python3 -c \"import pdfplumber; print\\(''ok''\\)\")",
+      "Bash(python3 -c \"import fitz; print\\(''ok''\\)\")",
+      "Bash(python3 -c \"import pdfplumber; print\\(''pdfplumber available''\\)\")",
+      "Bash(python -c \"import pdfplumber; print\\(''pdfplumber available''\\)\")",
+      "Bash(pip install:*)",
+      "Bash(python3 -c \"import PyPDF2; print\\(''PyPDF2''\\)\")",
+      "Bash(python -c \"import PyPDF2; print\\(''PyPDF2''\\)\")",
+      "Bash(python3 -c \"import pypdf; print\\(''pypdf''\\)\")",
+      "Bash(python -c \"import pypdf; print\\(''pypdf''\\)\")",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m pip install pdfplumber -q)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(where py:*)",
+      "Bash(node -e \"const fs = require\\(''fs''\\); const buf = fs.readFileSync\\(''C:/Users/waleed/Documents/daggerheart conntent creators/Daggerheart-SRD-9-09-25.pdf''\\); console.log\\(''Size:'', buf.length, ''bytes''\\);\")",
+      "Read(//c/Users/waleed/**)",
+      "Bash(node -e \"const fs=require\\(''fs''\\); const buf=fs.readFileSync\\(''Documents/daggerheart conntent creators/All-Cards-Printer-Friendly-9-09-25.pdf''\\); console.log\\(''File size:'', buf.length, ''bytes''\\);\")",
+      "Bash(npm list:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e \":*)",
+      "Bash(flutter create:*)",
+      "Bash(flutter pub:*)",
+      "Bash(flutter analyze:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where flutter:*)",
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" devices)",
+      "Bash(timeout /t 15 /nobreak)",
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" --version)",
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" analyze)",
+      "Bash(npm --version)",
+      "Bash(\"D:\\\\Flutter SDK\\\\flutter\\\\bin\\\\flutter.bat\" analyze --no-fatal-infos)"
+    ]
+  }
+}
